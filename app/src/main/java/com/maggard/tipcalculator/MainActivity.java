@@ -1,5 +1,7 @@
 package com.maggard.tipcalculator;
 
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,12 +34,16 @@ OnClickListener{
     private String billAmountString = "";
     private float tipPercent = .15f;
 
+    //define shared preferences
+    private SharedPreferences savedValues;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //get references to the widgets
         billAmountEditText = (EditText) findViewById(R.id.BillAmountEditText);
         percentTextView = (TextView) findViewById(R.id.percentTextView);
         tipTotalTextView =(TextView) findViewById(R.id.tipTotalTextView);
@@ -49,6 +55,9 @@ OnClickListener{
         billAmountEditText.setOnEditorActionListener(this);
         minusPercentButton.setOnClickListener(this);
         plusPercentButton.setOnClickListener(this);
+
+        //get SharedPreference object
+        savedValues = getSharedPreferences("SavedValues", MODE_PRIVATE);
 
     }
 
@@ -105,5 +114,26 @@ OnClickListener{
                 calculateAndDisplay();
                 break;
         }
+    }
+
+    @Override
+    protected void onPause() {
+        //save the instance variables
+        Editor editor = savedValues.edit();
+        editor.putString("billAmountString", billAmountString);
+        editor.putFloat("tipPercent",tipPercent); //check variable names if we have issues with saving
+        editor.commit();                         //submits the information
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //get instance variables from editor
+        billAmountString = savedValues.getString("billAmountString","");
+        tipPercent = savedValues.getFloat("tipPercent", 0.15f);
+
+        //call calculate and display
+        calculateAndDisplay();
     }
 }
