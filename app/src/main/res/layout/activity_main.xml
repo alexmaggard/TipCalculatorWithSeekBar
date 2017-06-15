@@ -24,7 +24,6 @@
         android:layout_height="45dp"
         android:text="@string/tip_percent"
         android:id="@+id/tipPercentLabel"
-        android:layout_marginTop="32dp"
         android:textStyle="bold"
         android:gravity="center_vertical"
         android:layout_below="@+id/billAmountLabel"
@@ -39,7 +38,8 @@
         android:textStyle="bold"
         android:layout_below="@+id/tipPercentLabel"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="50dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -47,9 +47,10 @@
         android:text="@string/total"
         android:id="@+id/totalLabel"
         android:textStyle="bold"
+        android:layout_below="@+id/tipTotalLabel"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/tipTotalLabel" />
+        android:layout_marginTop="38dp" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -63,36 +64,6 @@
         android:layout_marginLeft="60dp"
         android:layout_marginStart="60dp"
         android:background="#f7f282" />
-
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:text="@string/plus"
-        android:id="@+id/plusPercentButton"
-        android:background="#fc4d03"
-        android:textStyle="bold"
-        android:textColor="#ffffff"
-        android:textSize="26sp"
-        android:layout_alignTop="@+id/percentTextView"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:text="@string/minus"
-        android:id="@+id/minusPercentButton"
-        android:layout_alignTop="@+id/plusPercentButton"
-        android:layout_toLeftOf="@+id/plusPercentButton"
-        android:layout_toStartOf="@+id/plusPercentButton"
-        android:background="#fc4d03"
-        android:layout_marginRight="10dp"
-        android:textStyle="bold"
-        android:textColor="#ffffff"
-        android:textSize="30sp"
-        android:layout_marginLeft="20dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -123,5 +94,18 @@
         android:layout_alignTop="@+id/totalLabel"
         android:layout_alignLeft="@+id/tipTotalTextView"
         android:layout_alignStart="@+id/tipTotalTextView" />
+
+    <SeekBar
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/tipSeekBar"
+        android:max="30"
+        android:progress="15"
+        android:indeterminate="false"
+        android:progressBackgroundTint="#0672f6"
+        android:progressTint="#ed0a0a"
+        android:layout_below="@+id/tipPercentLabel"
+        android:layout_alignRight="@+id/percentTextView"
+        android:layout_alignEnd="@+id/percentTextView" />
 
 </RelativeLayout>

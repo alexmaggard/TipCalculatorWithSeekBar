@@ -2,22 +2,18 @@ package com.maggard.tipcalculator;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
-import android.view.View.OnClickListener;
 
 import java.text.NumberFormat;
 
-public class MainActivity extends AppCompatActivity implements OnEditorActionListener,
-OnClickListener{
+public class MainActivity extends AppCompatActivity implements OnEditorActionListener{
 
 
     //define variables for widgets
@@ -26,13 +22,12 @@ OnClickListener{
     private TextView percentTextView;
     private TextView tipTotalTextView;
     private TextView totalTextView;
-    private Button minusPercentButton;
-    private Button plusPercentButton;
+    private SeekBar tipSeekBar;
 
     //define instance variables
 
     private String billAmountString = "";
-    private float tipPercent = .15f;
+    private float tipPercent;
 
     //define shared preferences
     private SharedPreferences savedValues;
@@ -48,13 +43,12 @@ OnClickListener{
         percentTextView = (TextView) findViewById(R.id.percentTextView);
         tipTotalTextView =(TextView) findViewById(R.id.tipTotalTextView);
         totalTextView = (TextView) findViewById(R.id.totalTextView);
-        minusPercentButton = (Button) findViewById(R.id.minusPercentButton);
-        plusPercentButton = (Button) findViewById(R.id.plusPercentButton);
+        tipSeekBar = (SeekBar) findViewById(R.id.tipSeekBar);
 
         //set listeners
         billAmountEditText.setOnEditorActionListener(this);
-        minusPercentButton.setOnClickListener(this);
-        plusPercentButton.setOnClickListener(this);
+        //anonymous class listener
+        tipSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
 
         //get SharedPreference object
         savedValues = getSharedPreferences("SavedValues", MODE_PRIVATE);
@@ -74,7 +68,6 @@ OnClickListener{
     //calculate and display numbers
 
     private void calculateAndDisplay() {
-
         //get bill amount from the user
 
         billAmountString = billAmountEditText.getText().toString(); //gets the info from the user
@@ -87,7 +80,8 @@ OnClickListener{
         }
 
         //calculate tip and total
-
+        int progress = tipSeekBar.getProgress();
+        tipPercent = (float) progress /100;
         float tipAmount = billAmount * tipPercent;
         float totalAmount = billAmount + tipAmount;
 
@@ -102,19 +96,7 @@ OnClickListener{
     }
 
     //controls for percent buttons
-    @Override
-    public void onClick(View view) {
-        switch(view.getId()){
-            case R.id.minusPercentButton:
-                tipPercent = tipPercent - .01f;
-                calculateAndDisplay();
-                break;
-            case R.id.plusPercentButton:
-                tipPercent = tipPercent + .01f;
-                calculateAndDisplay();
-                break;
-        }
-    }
+
 
     @Override
     protected void onPause() {
@@ -136,4 +118,26 @@ OnClickListener{
         //call calculate and display
         calculateAndDisplay();
     }
+
+    //anonymous class listener
+    private SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
+        @Override
+        //public void onProgressChanged(SeekBar seekBar, int i, boolean b)
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+            percentTextView.setText(progress + "%");
+
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            calculateAndDisplay();
+        }
+    };
+
+
 }
